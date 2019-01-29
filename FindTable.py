@@ -64,7 +64,6 @@ def cv_size(img):
 
 
 def main():
-
 	#### controls window ####
 	cv2.namedWindow(controls_title_window)
 	
@@ -90,46 +89,33 @@ def main():
 		ret, frame = cap.read()
 		#### resize
 		resized = imutils.resize(frame, width=600)
-		
-		#### I just resized the image to a quarter of its original size
-		#image = cv2.resize(image, (0, 0), None, .25, .25)
 
 		#### BGR --> RGB
 		rgb = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
 		hsv = cv2.cvtColor(resized, cv2.COLOR_BGR2HSV)
 
-		final = rgb
+		# convert the resized image to grayscale, blur it slightly,
+		# and threshold it
+		gray    = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
+		blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+		thresh  = cv2.threshold(blurred, 200, 250, cv2.THRESH_BINARY_INV)[1]
 
-		#### create mask
-		mask = cv2.inRange(rgb, (ball[0], ball[1], ball[2]), (ball[3], ball[4], ball[5]))
-		# edit mask
-		mask = cv2.erode(mask, None, iterations=1)
-		mask = cv2.dilate(mask, None, iterations=2)
+		# find contours in the thresholded image and initialize the
+		# shape detector
+		cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+		cnts = imutils.grab_contours(cnts)
 
-		res = cv2.bitwise_and(rgb,rgb, mask= mask)
-		res = cv2.cvtColor(res, cv2.COLOR_RGB2BGR)
-		
-		#### find contours
-		cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
-		center = None
+		cnt = cnts[0]		
 
-		if len(cnts) > 0:
-			c = max(cnts, key=cv2.contourArea)
-			((x, y), radius) = cv2.minEnclosingCircle(c)
-				
-			circle_color = (255, 255, 255)
-			if radius > radius_min and radius < radius_max:
-				cv2.circle(res, (int(x), int(y)), int(radius), circle_color, 2)
+		rect = cv2.minAreaRect(cnt)
+		box = cv2.boxPoints(rect)
+		box = np.int0(box)
+		cv2.drawContours(resized,[box],0,(0,0,255),2)
 
-
-		#### combine original and mask image
-		#horizontal_concat = np.concatenate((resized, mask), axis=1)
-		
+			
 		if(ret):
 			cv2.imshow('frame', resized)
-			cv2.imshow('mask', res)
-		
-
+			
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
 

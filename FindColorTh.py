@@ -14,10 +14,24 @@ HIGH_RED = 3
 HIGH_GREEN = 4
 HIGH_BLUE = 5
 
-ball = [173,   0,   0, 255, 121, 255]
+### bal colors
+ball_white  = [227, 216, 181, 255, 252, 240,  255, 255, 255]
+ball_red    = [192,   0,   0, 255, 154, 100,  255,   0,   0]
+ball_blue   = [  0,   0, 94,  138,  83, 255,    0,   0, 255]
+ball_yellow = [221, 175,   0, 255, 241,  90,  255, 255,   0]
+ball_orange = [180,  90,   0, 255, 174, 112,  255, 100,   0]
+ball_violet = [ 39,   0,  69,  97,  84, 155,  255,  50, 255]
+ball_purple = [ 34,   0,  93, 165,  77, 127,  255,   0, 255]
+ball_green  = [  0,  57,  0,  34, 124,  70,   0, 255,   0]
+ball_black  = []
+ball_brown  = [100,  70,  15, 188, 106,  85, 170, 120,  90]
+ball_pink   = [255, 109, 106, 255, 193, 195, 255, 128, 255]
+table =  [47, 86, 97, 89, 195, 140]
 
-radius_min = 10
-radius_max = 40
+ball = ball_brown
+
+radius_min = 18
+radius_max = 25
 
 #balls = [ball_white , ball_red, ball_blue, ball_yellow, ball_orange, ball_violet, ball_purple, ball_green]
 
@@ -90,21 +104,15 @@ def main():
 		ret, frame = cap.read()
 		#### resize
 		resized = imutils.resize(frame, width=600)
-		
-		#### I just resized the image to a quarter of its original size
-		#image = cv2.resize(image, (0, 0), None, .25, .25)
 
 		#### BGR --> RGB
 		rgb = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
-		hsv = cv2.cvtColor(resized, cv2.COLOR_BGR2HSV)
-
-		final = rgb
 
 		#### create mask
 		mask = cv2.inRange(rgb, (ball[0], ball[1], ball[2]), (ball[3], ball[4], ball[5]))
 		# edit mask
 		mask = cv2.erode(mask, None, iterations=1)
-		mask = cv2.dilate(mask, None, iterations=2)
+		mask = cv2.dilate(mask, None, iterations=3)
 
 		res = cv2.bitwise_and(rgb,rgb, mask= mask)
 		res = cv2.cvtColor(res, cv2.COLOR_RGB2BGR)
@@ -113,8 +121,8 @@ def main():
 		cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 		center = None
 
-		if len(cnts) > 0:
-			c = max(cnts, key=cv2.contourArea)
+		for c in cnts:
+			#c = max(cnts, key=cv2.contourArea)
 			((x, y), radius) = cv2.minEnclosingCircle(c)
 				
 			circle_color = (255, 255, 255)
