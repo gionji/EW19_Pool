@@ -28,7 +28,7 @@ ball_brown  = [100,  70,  15, 188, 106,  85, 170, 120,  90]
 ball_pink   = [255, 109, 106, 255, 193, 195, 255, 128, 255]
 table =  [47, 86, 97, 89, 195, 140]
 
-ball = ball_brown
+ball = ball_red
 
 radius_min = 18
 radius_max = 25
