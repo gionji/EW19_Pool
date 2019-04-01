@@ -329,6 +329,10 @@ while cap.isOpened():
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
+        elif key == ord("r"):
+            print("Analazing empty table...")
+            fgbg = cv2.createBackgroundSubtractorMOG2()
+            print("DONE")
     else:
         break
 
