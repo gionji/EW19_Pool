@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 import numpy as np
 from collections import deque
@@ -185,6 +186,17 @@ field_found = False
 
 firstIteraction = True
 
+
+print "#####################"
+print "#    WAIT PLEASE    #"
+print "#    SYSTEM         #"
+print "#    WILL           #"
+print "#    APPEAR         #"
+print "#    SOON !         #"
+print "#####################"
+
+
+
 while cap.isOpened():
 
     # time.sleep(.05)
@@ -307,19 +319,18 @@ while cap.isOpened():
 
 	### Image plots 
         cv2.imshow('Table', frame)
-        cv2.imshow('Table', showing_frame)
-        cv2.imshow('Field image', field_image)        
+        cv2.imshow('Table', showing_frame)      
 	#cv2.imshow("fgmask", fg_mask)
         cv2.imshow("subtracted gray", gray)
         cv2.imshow("laplacian", laplacian)
         cv2.imshow("edges", edges)
         cv2.imshow("subtracted", subtracted)
         cv2.imshow("subtracted2", s2)
-
+        cv2.imshow('Field image', field_image)
 
         if firstIteraction:
-            cv2.moveWindow('Table',              0,    0)
-            cv2.moveWindow('Field image',      600,    0)
+            cv2.moveWindow('Table',            150,    0)
+            cv2.moveWindow('Field image',      700,    0)
             cv2.moveWindow('subtracted gray', 1200,    0)
             cv2.moveWindow('edges',              0,  500)
             cv2.moveWindow('subtracted2',      540,  550)
@@ -336,6 +347,7 @@ while cap.isOpened():
         elif key == ord("r"):
             print("Analazing empty table...")
             fgbg = cv2.createBackgroundSubtractorMOG2()
+            fms_couter = 0
             print("DONE")
     else:
         break

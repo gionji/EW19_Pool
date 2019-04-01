@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=PoolDemo
+Type=Application
+Exec=/home/udoo/EW19_Pool/dist/PoolDemo.py
+Icon=/home/udoo/EW19_Pool/dist/poolball.png
+Terminal=true
+~            
