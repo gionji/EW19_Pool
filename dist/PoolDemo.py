@@ -183,6 +183,8 @@ last_frame_centers = list()
 table_found = False
 field_found = False
 
+firstIteraction = True
+
 while cap.isOpened():
 
     # time.sleep(.05)
@@ -315,13 +317,15 @@ while cap.isOpened():
         cv2.imshow("subtracted2", s2)
 
 
-        cv2.moveWindow('Table',              0,    0)
-        cv2.moveWindow('Field image',      600,    0)
-        cv2.moveWindow('subtracted gray', 1200,    0)
-        cv2.moveWindow('edges',              0,  500)
-        cv2.moveWindow('subtracted2',      540,  550)
-        cv2.moveWindow('laplacian',       1200,  450)
-        cv2.moveWindow('subtracted',      1200,  900)
+        if firstIteraction:
+            cv2.moveWindow('Table',              0,    0)
+            cv2.moveWindow('Field image',      600,    0)
+            cv2.moveWindow('subtracted gray', 1200,    0)
+            cv2.moveWindow('edges',              0,  500)
+            cv2.moveWindow('subtracted2',      540,  550)
+            cv2.moveWindow('laplacian',       1200,  450)
+            cv2.moveWindow('subtracted',      1200,  900)
+            firstIteraction = False
 
         time.sleep(0.01)
 
