@@ -215,7 +215,7 @@ while cap.isOpened():
                 showing_frame = frame.copy()
                 cv2.rectangle(showing_frame, (yut, xlt), (ylt, xrt), TABLE_DRAW_COLOR, 3)
                 cv2.putText(showing_frame, 'Table', (yut, xlt), font, TABLE_FONT_SCALE, TABLE_DRAW_COLOR, 2, cv2.LINE_AA)
-                cv2.imshow('Table', frame)
+                #cv2.imshow('Table', frame)
 
         # print rect on the table
         if table_rect is None:
@@ -233,7 +233,7 @@ while cap.isOpened():
                 print("Detected Field at positions: ", xl, xr, yu, yl)
                 cv2.rectangle(showing_frame, (yu, xl), (yl, xr),(255, 0, 0),3)
                 cv2.putText(showing_frame, 'Field', (yu, xl), font, FRAME_FONT_SCALE, FIELD_DRAW_COLOR, 2, cv2.LINE_AA)
-                cv2.imshow('Table', showing_frame)
+                #cv2.imshow('Table', showing_frame)
         
         if field_rect is None:
             continue
@@ -278,20 +278,11 @@ while cap.isOpened():
         laplacian = cv2.Laplacian(frame, cv2.CV_64F)
         edges = cv2.Canny(frame, 100, 200)
 
-        cv2.imshow("subtracted", subtracted)
-        cv2.imshow("subtracted2", s2)
-        cv2.imshow("laplacian", laplacian)
-        cv2.imshow("edges", edges)
 
         blurred = cv2.medianBlur(s2, 7)
         gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
 
 
-        #cv2.imshow("fgmask", fg_mask)
-        cv2.imshow("subtracted gray", gray)
-
-        
-        
         # Detect blobs
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
                                    param1=10, param2=20, minRadius=MIN_CIRCLE_RADIUS, maxRadius=MAX_CIRCLE_RADIUS)
@@ -309,8 +300,30 @@ while cap.isOpened():
                         cv2.putText(field_image, str(cc[i, 0])+ " " + str(cc[i, 1]) , (cc[i, 0], cc[i, 1]), font, 0.4, TABLE_DRAW_COLOR, 2, cv2.LINE_AA)
                                
 
-        cv2.imshow('Field image', field_image)
+        
         # cv2.imshow('gray', cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
+
+	### Image plots 
+        cv2.imshow('Table', frame)
+        cv2.imshow('Table', showing_frame)
+        cv2.imshow('Field image', field_image)        
+	#cv2.imshow("fgmask", fg_mask)
+        cv2.imshow("subtracted gray", gray)
+        cv2.imshow("laplacian", laplacian)
+        cv2.imshow("edges", edges)
+        cv2.imshow("subtracted", subtracted)
+        cv2.imshow("subtracted2", s2)
+
+
+        cv2.moveWindow('Table',              0,    0)
+        cv2.moveWindow('Field image',      600,    0)
+        cv2.moveWindow('subtracted gray', 1200,    0)
+        cv2.moveWindow('edges',              0,  500)
+        cv2.moveWindow('subtracted2',      540,  550)
+        cv2.moveWindow('laplacian',       1200,  450)
+        cv2.moveWindow('subtracted',      1200,  900)
+
+        time.sleep(0.01)
 
         # if the 'q' key is pressed, stop the loop
         key = cv2.waitKey(1) & 0xFF
